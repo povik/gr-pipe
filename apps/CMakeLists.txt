@@ -19,8 +19,7 @@
 
 include(GrPython)
 
-#GR_PYTHON_INSTALL(
-#    PROGRAMS
-#    pipe_filter.py
-#    DESTINATION bin
-#)
+GR_PYTHON_INSTALL(
+    PROGRAMS
+    DESTINATION bin
+)

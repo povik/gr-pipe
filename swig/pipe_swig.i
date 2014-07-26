@@ -9,9 +9,9 @@
 
 
 %{
-#include "pipe_filter.h"
-#include "pipe_source.h"
-#include "pipe_sink.h"
+#include "pipe/filter.h"
+#include "pipe/source.h"
+#include "pipe/sink.h"
 %}
 
 %include "pipe_filter.i"

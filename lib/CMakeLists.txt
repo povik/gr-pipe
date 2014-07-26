@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011,2012 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -22,11 +22,17 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-add_library(gnuradio-pipe SHARED
-  pipe_filter.cc
-  pipe_source.cc
-  pipe_sink.cc)
-target_link_libraries(gnuradio-pipe ${Boost_LIBRARIES} ${GRUEL_LIBRARIES} ${GNURADIO_CORE_LIBRARIES})
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+
+list(APPEND pipe_sources
+    pipe_filter.cc
+    pipe_source.cc
+    pipe_sink.cc
+)
+
+add_library(gnuradio-pipe SHARED ${pipe_sources})
+target_link_libraries(gnuradio-pipe ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES})
 set_target_properties(gnuradio-pipe PROPERTIES DEFINE_SYMBOL "gnuradio_pipe_EXPORTS")
 
 ########################################################################
@@ -41,13 +47,23 @@ install(TARGETS gnuradio-pipe
 ########################################################################
 # Build and register unit test
 ########################################################################
-find_package(Boost COMPONENTS unit_test_framework)
-
 include(GrTest)
-#set(GR_TEST_TARGET_DEPS gnuradio-pipe)
-#turn each test cpp file into an executable with an int main() function
-#add_definitions(-DBOOST_TEST_DYN_LINK -DBOOST_TEST_MAIN)
 
-#add_executable(qa_pipe_filter qa_pipe_filter.cc)
-#target_link_libraries(qa_pipe_filter gnuradio-pipe ${Boost_LIBRARIES})
-#GR_ADD_TEST(qa_pipe_filter qa_pipe_filter)
+include_directories(${CPPUNIT_INCLUDE_DIRS})
+
+list(APPEND test_pipe_sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_pipe.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/qa_pipe.cc
+)
+
+add_executable(test-pipe ${test_pipe_sources})
+
+target_link_libraries(
+  test-pipe
+  ${GNURADIO_RUNTIME_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${CPPUNIT_LIBRARIES}
+  gnuradio-pipe
+)
+
+GR_ADD_TEST(test_pipe test-pipe)

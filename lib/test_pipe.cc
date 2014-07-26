@@ -1,5 +1,6 @@
+/* -*- c++ -*- */
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2012 Free Software Foundation, Inc.
  *
  * This file is part of GNU Radio
  *
@@ -19,15 +20,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_PIPE_API_H
-#define INCLUDED_PIPE_API_H
-
-#include <gruel/attributes.h>
-
-#ifdef gnuradio_pipe_EXPORTS
-#  define PIPE_API __GR_ATTR_EXPORT
-#else
-#  define PIPE_API __GR_ATTR_IMPORT
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
-#endif /* INCLUDED_PIPE_API_H */
+#include <cppunit/TextTestRunner.h>
+#include <cppunit/XmlOutputter.h>
+
+#include <gnuradio/unittests.h>
+#include "qa_pipe.h"
+#include <iostream>
+
+int
+main (int argc, char **argv)
+{
+  CppUnit::TextTestRunner runner;
+  std::ofstream xmlfile(get_unittest_path("pipe.xml").c_str());
+  CppUnit::XmlOutputter *xmlout = new CppUnit::XmlOutputter(&runner.result(), xmlfile);
+
+  runner.addTest(qa_pipe::suite());
+  runner.setOutputter(xmlout);
+
+  bool was_successful = runner.run("", false);
+
+  return was_successful ? 0 : 1;
+}

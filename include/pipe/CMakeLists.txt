@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011,2012 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -21,9 +21,8 @@
 # Install public header files
 ########################################################################
 install(FILES
-    pipe_api.h
-    pipe_filter.h
-    pipe_source.h
-    pipe_sink.h
-    DESTINATION include/pipe
+    api.h
+    source.h
+    sink.h
+    filter.h DESTINATION include/pipe
 )

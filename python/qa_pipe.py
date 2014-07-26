@@ -20,7 +20,7 @@
 # Boston, MA 02110-1301, USA.
 #
 
-from gnuradio import gr, gr_unittest
+from gnuradio import gr, gr_unittest, blocks
 import os, time
 import pipe_swig
 
@@ -36,7 +36,7 @@ class qa_pipe (gr_unittest.TestCase):
         test_str = "Hello GNU Radio"
         expected_result = tuple(map(lambda x: long(ord(x)), list(test_str)))
         pipe_source = pipe_swig.source(gr.sizeof_char, "echo -n " + test_str)
-        dst = gr.vector_sink_b ()
+        dst = blocks.vector_sink_b ()
         self.tb.connect (pipe_source, dst)
         self.tb.run ()
         result_data = dst.data ()
@@ -46,20 +46,21 @@ class qa_pipe (gr_unittest.TestCase):
     #     test_str = "Hello GNU Radio!"
     #     src_data = map(lambda x: ord(x), list(test_str))
     #     expected_result = tuple(map(lambda x: long(ord(x)), list(test_str.upper())))
-    #     src = gr.vector_source_b (src_data, True)
+    #     src = blocks.vector_source_b (src_data, True)
     #     pipe_filter = pipe_swig.filter(gr.sizeof_char, gr.sizeof_char, 1.0, "tr a-z A-Z")
     #     head = gr.head(gr.sizeof_char, len(test_str))
-    #     dst = gr.vector_sink_b ()
+    #     dst = blocks.vector_sink_b ()
     #     self.tb.connect (src, pipe_filter, head, dst)
     #     self.tb.run () 
     #     result_data = dst.data ()
     #     self.assertEqual (expected_result, result_data)
 
     def test_003_pipe_sink (self):
+        print "start"
         test_str = "Hello GNU Radio"
         filename = "/tmp/test_003_pipe_sink." + str(os.getpid())
         src_data = map(lambda x: ord(x), list(test_str))
-        src = gr.vector_source_b (src_data)
+        src = blocks.vector_source_b (src_data)
         pipe_sink = pipe_swig.sink(gr.sizeof_char, "cat > " + filename)
         self.tb.connect (src, pipe_sink)
         self.tb.run ()

@@ -38,8 +38,8 @@
 #include <errno.h>
 
 #include <iostream>
-#include <pipe_sink.h>
-#include <gr_io_signature.h>
+#include <pipe/sink.h>
+#include <gnuradio/io_signature.h>
 
 /*
  * Create a new instance of pipe_sink and return
@@ -71,9 +71,9 @@ static const int MAX_OUT = 0;	// maximum number of output streams
 
 pipe_sink::pipe_sink (size_t in_item_sz,
                       const char *cmd)
-  : gr_sync_block ("pipe_sink",
-                   gr_make_io_signature (MIN_IN,  MAX_IN,  in_item_sz),
-                   gr_make_io_signature (MIN_OUT, MAX_OUT, 0)),
+  : gr::sync_block ("pipe_sink",
+                   gr::io_signature::make (MIN_IN,  MAX_IN,  in_item_sz),
+                   gr::io_signature::make (MIN_OUT, MAX_OUT, 0)),
     d_in_item_sz (in_item_sz)
 {
   create_command_process(cmd);

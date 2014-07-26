@@ -40,8 +40,8 @@
 #include <signal.h>
 
 #include <iostream>
-#include <pipe_source.h>
-#include <gr_io_signature.h>
+#include <pipe/source.h>
+#include <gnuradio/io_signature.h>
 
 /*
  * Create a new instance of pipe_source and return
@@ -74,9 +74,9 @@ static const int MAX_OUT = 1;	// maximum number of output streams
 
 pipe_source::pipe_source (size_t out_item_sz,
                           const char *cmd)
-  : gr_sync_block ("pipe_source",
-                   gr_make_io_signature (MIN_IN,  MAX_IN,  0),
-                   gr_make_io_signature (MIN_OUT, MAX_OUT, out_item_sz)),
+  : gr::sync_block ("pipe_source",
+                   gr::io_signature::make (MIN_IN,  MAX_IN,  0),
+                   gr::io_signature::make (MIN_OUT, MAX_OUT, out_item_sz)),
     d_out_item_sz (out_item_sz)
 {
   create_command_process(cmd);
@@ -191,6 +191,9 @@ pipe_source::work (int noutput_items,
   int n_produced;
 
   n_produced = read_process_output(out, noutput_items);
+
+  if (!n_produced && feof(d_cmd_stdout))
+    return -1;
 
   return (n_produced);
 }

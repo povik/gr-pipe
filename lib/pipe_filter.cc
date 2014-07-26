@@ -38,8 +38,8 @@
 #include <errno.h>
 
 #include <iostream>
-#include <pipe_filter.h>
-#include <gr_io_signature.h>
+#include <pipe/filter.h>
+#include <gnuradio/io_signature.h>
 
 /*
  * Create a new instance of pipe_filter and return
@@ -78,9 +78,9 @@ pipe_filter::pipe_filter (size_t in_item_sz,
                           size_t out_item_sz,
                           double relative_rate,
                           const char *cmd)
-  : gr_block ("pipe_filter",
-	      gr_make_io_signature (MIN_IN,  MAX_IN,  in_item_sz),
-	      gr_make_io_signature (MIN_OUT, MAX_OUT, out_item_sz)),
+  : gr::block ("pipe_filter",
+	      gr::io_signature::make (MIN_IN,  MAX_IN,  in_item_sz),
+	      gr::io_signature::make (MIN_OUT, MAX_OUT, out_item_sz)),
     d_in_item_sz (in_item_sz),
     d_out_item_sz (out_item_sz),
     d_relative_rate (relative_rate)
